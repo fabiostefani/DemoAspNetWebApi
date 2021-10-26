@@ -1,8 +1,6 @@
-namespace Business.Models
+namespace Business.Models;
+public enum TipoFornecedor
 {
-    public enum TipoFornecedor
-    {
-        PessoaFisica = 1,
-        PessoaJuridica
-    }
+    PessoaFisica = 1,
+    PessoaJuridica
 }

@@ -1,9 +1,8 @@
 using Business.Models;
 
-namespace Business.Interfaces
+namespace Business.Interfaces;
+
+public interface IEnderecoRepository : IRepository<Endereco>
 {
-    public interface IEnderecoRepository : IRepository<Endereco>
-    {
-        Task<Endereco> ObterEnderecoPorFornecedor(Guid fornecedorId);
-    }
+    Task<Endereco> ObterEnderecoPorFornecedor(Guid fornecedorId);
 }

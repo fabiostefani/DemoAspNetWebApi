@@ -1,11 +1,9 @@
 using Business.Models;
 
-namespace Business.Interfaces
+namespace Business.Interfaces;
+public interface IProdutoRepository : IRepository<Produto>
 {
-    public interface IProdutoRepository : IRepository<Produto>
-    {
-        Task<IEnumerable<Produto>> ObterProdutosPorFornecedor(Guid id);
-        Task<IEnumerable<Produto>> ObterProdutosFornecedores();
-        Task<Produto> ObterProdutoFornecedor(Guid id);
-    }
+    Task<IEnumerable<Produto>> ObterProdutosPorFornecedor(Guid id);
+    Task<IEnumerable<Produto>> ObterProdutosFornecedores();
+    Task<Produto> ObterProdutoFornecedor(Guid id);
 }

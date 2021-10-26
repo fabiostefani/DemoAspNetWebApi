@@ -1,18 +1,16 @@
-namespace Business.Models.Validations.Documentos
+namespace Business.Models.Validations.Documentos;
+public class Utils
 {
-    public class Utils
+    public static string ApenasNumeros(string valor)
     {
-        public static string ApenasNumeros(string valor)
+        var onlyNumber = "";
+        foreach (var s in valor)
         {
-            var onlyNumber = "";
-            foreach (var s in valor)
+            if (char.IsDigit(s))
             {
-                if (char.IsDigit(s))
-                {
-                    onlyNumber += s;
-                }
+                onlyNumber += s;
             }
-            return onlyNumber.Trim();
         }
+        return onlyNumber.Trim();
     }
 }
