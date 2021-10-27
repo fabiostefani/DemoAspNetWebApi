@@ -1,4 +1,6 @@
 using Business.Interfaces;
+using Business.Notificacoes;
+using Business.Services;
 using Data.Context;
 using Data.Repository;
 
@@ -10,6 +12,13 @@ namespace Api.Configuration
         {
             services.AddScoped<MeuDbContext>();
             services.AddScoped<IFornecedorRepository, FornecedorRepository>();
+            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IFornecedorService, FornecedorService>();
+            //services.AddScoped<IProdutoService, ProdutoService>();
+            services.AddScoped<INotificador, Notificador>();
+            services.AddScoped<IProdutoService, ProdutoService>();
+
             return services;
         }
     }
