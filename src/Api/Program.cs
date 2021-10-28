@@ -1,5 +1,6 @@
 using Api.Configuration;
 using Data.Context;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,10 @@ builder.Services.AddDbContext<MeuDbContext>(options =>
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.ResolveDependencies();
+builder.Services.Configure<ApiBehaviorOptions>(opt =>
+{
+    opt.SuppressModelStateInvalidFilter = true;
+});
 
 var app = builder.Build();
 
