@@ -90,31 +90,30 @@ public class ProdutosController : MainController
 //     }
 
 //     [ClaimsAuthorize("Produto", "Adicionar")]
-//     [HttpPost("Adicionar")]
-//     public async Task<ActionResult<ProdutoViewModel>> AdicionarAlternativo(ProdutoImagemViewModel produtoViewModel)
-//     {
-//         if (!ModelState.IsValid) return CustomResponse(ModelState);
+    [HttpPost("Adicionar")]
+    public async Task<ActionResult<ProdutoViewModel>> AdicionarAlternativo(ProdutoImagemViewModel produtoViewModel)
+    {
+        if (!ModelState.IsValid) return CustomResponse(ModelState);
+        var imgPrefixo = Guid.NewGuid() + "_";
+        if (!await UploadArquivoAlternativo(produtoViewModel.ImagemUpload, imgPrefixo))
+        {
+            return CustomResponse(ModelState);
+        }
 
-//         var imgPrefixo = Guid.NewGuid() + "_";
-//         if (!await UploadArquivoAlternativo(produtoViewModel.ImagemUpload, imgPrefixo))
-//         {
-//             return CustomResponse(ModelState);
-//         }
+        produtoViewModel.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
+        await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
-//         produtoViewModel.Imagem = imgPrefixo + produtoViewModel.ImagemUpload.FileName;
-//         await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
-
-//         return CustomResponse(produtoViewModel);
-//     }
+        return CustomResponse(produtoViewModel);
+    }
 
 
-//     [RequestSizeLimit(40000000)]
+    [RequestSizeLimit(40000000)]
 //     //[DisableRequestSizeLimit]
-//     [HttpPost("imagem")]
-//     public ActionResult AdicionarImagem(IFormFile file)
-//     {
-//         return Ok(file);
-//     }
+    [HttpPost("imagem")]
+    public ActionResult AdicionarImagem(IFormFile file)
+    {
+        return Ok(file);
+    }
 
 //     [ClaimsAuthorize("Produto", "Excluir")]
     [HttpDelete("{id:guid}")]
@@ -134,7 +133,7 @@ public class ProdutosController : MainController
             return false;
         }
         var imageDataByteArray = Convert.FromBase64String(arquivo);
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgNome);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/app/demo-webapi/src/assets", imgNome);
         if (System.IO.File.Exists(filePath))
         {
             NotificarErro("Já existe um arquivo com este nome!");
@@ -143,29 +142,25 @@ public class ProdutosController : MainController
         System.IO.File.WriteAllBytes(filePath, imageDataByteArray);
         return true;
     }
-//     private async Task<bool> UploadArquivoAlternativo(IFormFile arquivo, string imgPrefixo)
-//     {
-//         if (arquivo == null || arquivo.Length == 0)
-//         {
-//             NotificarErro("Forneça uma imagem para este produto!");
-//             return false;
-//         }
-
-//         var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/app/demo-webapi/src/assets", imgPrefixo + arquivo.FileName);
-
-//         if (System.IO.File.Exists(path))
-//         {
-//             NotificarErro("Já existe um arquivo com este nome!");
-//             return false;
-//         }
-
-//         using (var stream = new FileStream(path, FileMode.Create))
-//         {
-//             await arquivo.CopyToAsync(stream);
-//         }
-
-//         return true;
-//     }
+    private async Task<bool> UploadArquivoAlternativo(IFormFile arquivo, string imgPrefixo)
+    {
+        if (arquivo == null || arquivo.Length == 0)
+        {
+            NotificarErro("Forneça uma imagem para este produto!");
+            return false;
+        }
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/app/demo-webapi/src/assets", imgPrefixo + arquivo.FileName);
+        if (System.IO.File.Exists(path))
+        {
+            NotificarErro("Já existe um arquivo com este nome!");
+            return false;
+        }
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            await arquivo.CopyToAsync(stream);
+        }
+        return true;
+    }
 
 
     private async Task<ProdutoViewModel> ObterProduto(Guid id)
