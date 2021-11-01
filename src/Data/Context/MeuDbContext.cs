@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Design;
 namespace Data.Context;
 public class MeuDbContext : DbContext
 {
-    public MeuDbContext(DbContextOptions options)
+    public MeuDbContext(DbContextOptions<MeuDbContext> options)
         : base(options)
     {
 

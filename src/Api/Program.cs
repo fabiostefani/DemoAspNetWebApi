@@ -1,5 +1,8 @@
 using Api.Configuration;
+using Api.Data;
+using Api.Extensions;
 using Data.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MeuDbContext>(options =>
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddIdentityConfiguration(builder.Configuration);
 builder.Services.WebApiConfig();
 builder.Services.ResolveDependencies();
 
@@ -22,6 +26,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseAuthentication();
 app.UseCors("Development");
 app.UseHttpsRedirection();
 app.UseAuthorization();
