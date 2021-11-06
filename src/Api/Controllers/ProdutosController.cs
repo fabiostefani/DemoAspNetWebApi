@@ -1,12 +1,14 @@
+using Api.Extensions;
 using Api.ViewModels;
 using AutoMapper;
 using Business.Interfaces;
 using Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-// [Authorize]
+[Authorize]
 // [ApiVersion("1.0")]
 [Route("api/produtos")]
 public class ProdutosController : MainController
@@ -38,7 +40,7 @@ public class ProdutosController : MainController
         return produtoViewModel;
     }
 
-//     [ClaimsAuthorize("Produto", "Adicionar")]
+    [ClaimsAuthorize("Produto", "Adicionar")]
     [HttpPost]
     public async Task<ActionResult<ProdutoViewModel>> Adicionar(ProdutoViewModel produtoViewModel)
     {
@@ -54,7 +56,7 @@ public class ProdutosController : MainController
          return CustomResponse(produtoViewModel);
     }
 
-//     [ClaimsAuthorize("Produto", "Atualizar")]
+    [ClaimsAuthorize("Produto", "Atualizar")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Atualizar(Guid id, ProdutoViewModel produtoViewModel)
     {
@@ -83,7 +85,7 @@ public class ProdutosController : MainController
         return CustomResponse(produtoViewModel);
     }
 
-//     [ClaimsAuthorize("Produto", "Adicionar")]
+    [ClaimsAuthorize("Produto", "Adicionar")]
     [HttpPost("Adicionar")]
     public async Task<ActionResult<ProdutoViewModel>> AdicionarAlternativo(ProdutoImagemViewModel produtoViewModel)
     {
@@ -109,7 +111,7 @@ public class ProdutosController : MainController
         return Ok(file);
     }
 
-//     [ClaimsAuthorize("Produto", "Excluir")]
+    [ClaimsAuthorize("Produto", "Excluir")]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<ProdutoViewModel>> Excluir(Guid id)
     {

@@ -1,4 +1,4 @@
-using System.Collections;
+using Api.Extensions;
 using Api.ViewModels;
 using AutoMapper;
 using Business.Interfaces;
@@ -46,7 +46,7 @@ public class FornecedoresController : MainController
         return fornecedor;
     }
 
-    // [ClaimsAuthorize("Fornecedor","Adicionar")]
+    [ClaimsAuthorize("Fornecedor","Adicionar")]
     [HttpPost]
     public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
     {
@@ -55,7 +55,7 @@ public class FornecedoresController : MainController
         return CustomResponse(fornecedorViewModel);
     }
 
-    // [ClaimsAuthorize("Fornecedor", "Atualizar")]
+    [ClaimsAuthorize("Fornecedor", "Atualizar")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
     {
@@ -65,7 +65,7 @@ public class FornecedoresController : MainController
         return CustomResponse(fornecedorViewModel);
     }
 
-    // [ClaimsAuthorize("Fornecedor", "Excluir")]
+    [ClaimsAuthorize("Fornecedor", "Excluir")]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<FornecedorViewModel>> Excluir(Guid id)
     {
@@ -81,7 +81,7 @@ public class FornecedoresController : MainController
         return _mapper.Map<EnderecoViewModel>(await _enderecoRepository.ObterPorId(id));
     }
 
-    // [ClaimsAuthorize("Fornecedor", "Atualizar")]
+    [ClaimsAuthorize("Fornecedor", "Atualizar")]
     [HttpPut("endereco/{id:guid}")]
     public async Task<IActionResult> AtualizarEndereco(Guid id, EnderecoViewModel enderecoViewModel)
     {
