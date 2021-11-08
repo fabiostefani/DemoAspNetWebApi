@@ -4,6 +4,7 @@ using System.Text;
 using Api.Extensions;
 using Api.ViewModels;
 using Business.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Api.Controllers
 {
     //[ApiVersion("1.0")]
+    //[DisableCors()]
     [Route("api/[controller]")]
     public class AuthController : MainController
     {
@@ -24,8 +26,8 @@ namespace Api.Controllers
                               SignInManager<IdentityUser> signInManager, 
                               UserManager<IdentityUser> userManager, 
                               IOptions<AppSettings> appSettings,
-                              //IUser user, 
-                              ILogger<AuthController> logger) : base(notificador)
+                              IUser user, 
+                              ILogger<AuthController> logger) : base(notificador, user)
         {
             _signInManager = signInManager;
             _userManager = userManager;

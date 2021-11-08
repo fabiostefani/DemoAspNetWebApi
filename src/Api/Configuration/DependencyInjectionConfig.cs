@@ -1,3 +1,4 @@
+using Api.Extensions;
 using Business.Interfaces;
 using Business.Notificacoes;
 using Business.Services;
@@ -18,6 +19,9 @@ namespace Api.Configuration
             //services.AddScoped<IProdutoService, ProdutoService>();
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IProdutoService, ProdutoService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUser, AspNetUser>();
 
             return services;
         }

@@ -23,12 +23,17 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors("Development");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else 
+{   
+    app.UseCors("Production");
+    app.UseHsts();
+}
 app.UseAuthentication();
-app.UseCors("Development");
-app.UseHttpsRedirection();
+app.UseMvcConfiguration();
 app.UseAuthorization();
 app.MapControllers();
 

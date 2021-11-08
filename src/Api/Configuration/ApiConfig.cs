@@ -2,6 +2,7 @@ using Api.Configuration;
 using Data.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 
 namespace Api.Configuration
 {
@@ -21,12 +22,21 @@ namespace Api.Configuration
                 builder => builder.AllowAnyOrigin()
                                 .AllowAnyMethod()
                                 .AllowAnyHeader());
+
+                opt.AddPolicy("Production",
+                builder => builder.WithMethods("GET")
+                            .WithOrigins("http://desenvolvedor.io")
+                            .SetIsOriginAllowedToAllowWildcardSubdomains()
+                            //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
+                            .AllowAnyHeader());
             });
+            
             return services;
         }
 
         public static IApplicationBuilder UseMvcConfiguration(this IApplicationBuilder app)
-        {
+        {            
+            app.UseHttpsRedirection();
             
             return app;
         }

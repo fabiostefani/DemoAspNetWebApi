@@ -21,7 +21,8 @@ public class FornecedoresController : MainController
                                   IFornecedorService fornecedorService,
                                   IEnderecoRepository enderecoRepository,
                                   IMapper mapper,
-                                  INotificador notificador) : base(notificador)
+                                  INotificador notificador,
+                                  IUser user) : base(notificador, user)
     {
         _fornecedorRepository = fornecedorRepository;
         _fornecedorService = fornecedorService;
@@ -50,6 +51,16 @@ public class FornecedoresController : MainController
     [HttpPost]
     public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
     {
+        if (User.Identity.IsAuthenticated)
+        {
+            var userName = User.Identity.Name;
+        }
+
+        if (UsuarioAutenticado)
+        {
+            var username = UsuarioId;
+        }
+        
         if (!ModelState.IsValid) return CustomResponse(ModelState);
         await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));        
         return CustomResponse(fornecedorViewModel);
