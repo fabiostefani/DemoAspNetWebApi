@@ -16,6 +16,19 @@ namespace Api.Configuration
                 opt.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(opt =>
+            {
+                opt.GroupNameFormat = "'v'VVV";
+                opt.SubstituteApiVersionInUrl = true;
+            });
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy("Development",

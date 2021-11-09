@@ -14,11 +14,11 @@ public abstract class MainController : ControllerBase
     protected Guid UsuarioId { get; set; }
     protected bool UsuarioAutenticado { get; set; }
 
-    protected MainController(INotificador notificador, 
+    protected MainController(INotificador notificador,
                              IUser appUser)
     {
         _notificador = notificador;
-        AppUser = appUser;        
+        AppUser = appUser;
 
         if (appUser.IsAuthenticated())
         {
@@ -36,7 +36,7 @@ public abstract class MainController : ControllerBase
     {
         if (OperacaoValida())
         {
-            return Ok(new {success = true, data = result });
+            return Ok(new { success = true, data = result });
         }
         return BadRequest(new
         {
@@ -47,7 +47,7 @@ public abstract class MainController : ControllerBase
 
     protected ActionResult CustomResponse(ModelStateDictionary modelState)
     {
-        if(!modelState.IsValid) NotificarErroModelInvalida(modelState);
+        if (!modelState.IsValid) NotificarErroModelInvalida(modelState);
         return CustomResponse();
     }
 

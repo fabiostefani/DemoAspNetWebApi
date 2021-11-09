@@ -1,3 +1,5 @@
+using System;
+using Api.Controllers;
 using Api.Extensions;
 using Api.ViewModels;
 using AutoMapper;
@@ -6,11 +8,12 @@ using Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace Api.V1.Controllers;
 
 
 [Authorize]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class FornecedoresController : MainController
 {
     private readonly IFornecedorRepository _fornecedorRepository;
@@ -35,7 +38,7 @@ public class FornecedoresController : MainController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> ObterTodos()
     {
-        var fornecedores =_mapper.Map<IEnumerable<FornecedorViewModel>>( await _fornecedorRepository.ObterTodos());
+        var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
         return Ok(fornecedores);
     }
 
@@ -47,7 +50,7 @@ public class FornecedoresController : MainController
         return fornecedor;
     }
 
-    [ClaimsAuthorize("Fornecedor","Adicionar")]
+    [ClaimsAuthorize("Fornecedor", "Adicionar")]
     [HttpPost]
     public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
     {
@@ -60,9 +63,9 @@ public class FornecedoresController : MainController
         {
             var username = UsuarioId;
         }
-        
+
         if (!ModelState.IsValid) return CustomResponse(ModelState);
-        await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));        
+        await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
         return CustomResponse(fornecedorViewModel);
     }
 
@@ -71,8 +74,8 @@ public class FornecedoresController : MainController
     public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
     {
         if (id != fornecedorViewModel.Id) return BadRequest();
-        if (!ModelState.IsValid) return CustomResponse(ModelState);        
-        await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));        
+        if (!ModelState.IsValid) return CustomResponse(ModelState);
+        await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
         return CustomResponse(fornecedorViewModel);
     }
 
@@ -82,7 +85,7 @@ public class FornecedoresController : MainController
     {
         var fornecedorViewModel = await ObterFornecedorEndereco(id);
         if (fornecedorViewModel == null) return NotFound();
-        await _fornecedorService.Remover(id);        
+        await _fornecedorService.Remover(id);
         return CustomResponse(fornecedorViewModel);
     }
 
