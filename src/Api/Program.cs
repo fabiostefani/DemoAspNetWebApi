@@ -1,10 +1,8 @@
-using System;
 using Api.Configuration;
-using Api.Data;
 using Api.Extensions;
 using Data.Context;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +19,17 @@ builder.Services.AddIdentityConfiguration(builder.Configuration);
 builder.Services.WebApiConfig();
 builder.Services.AddSwaggerConfig();
 builder.Services.ResolveDependencies();
+builder.Services.AddLoggingConfiguration();
+builder.Services.AddHealthChecks()
+.AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection"), name: "BancoSql");
+// builder.Services.AddHealthChecksUI(options =>
+// {
+//     //options.SetEvaluationTimeInSeconds(5);
+//     options.MaximumHistoryEntriesPerEndpoint(10);
+//     options.AddHealthCheckEndpoint("API com Health Checks", "/health");
+// });
+//.AddInMemoryStorage(); //Aqui adicionamos o banco em memória
+
 var provider = builder.Services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
 
 var app = builder.Build();
@@ -35,9 +44,17 @@ else
     app.UseHsts();
 }
 app.UseAuthentication();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMvcConfiguration();
 app.UseAuthorization();
 app.MapControllers();
 app.UseSwaggerConfig(provider);
+app.UseLoggingConfiguration();
+app.UseHealthChecks("/api/hc");
+// app.UseHealthChecksUI(opt =>
+// {
+//     opt.UIPath = "/api/hc/ui";
+// });
+
 
 app.Run();

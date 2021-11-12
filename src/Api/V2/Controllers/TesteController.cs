@@ -1,5 +1,6 @@
 using Api.Controllers;
 using Business.Interfaces;
+using Elmah.Io.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.V2.Controllers
@@ -20,6 +21,16 @@ namespace Api.V2.Controllers
         [HttpGet]
         public string Valor()
         {
+            throw new Exception("ERROUUU");
+            try
+            {
+                var i = 0;
+                var result = 42 / i;
+            }
+            catch ( DivideByZeroException e)
+            {
+                e.Ship(HttpContext);
+            }
             _logger.LogTrace("Log de Trace");
             _logger.LogDebug("Log de Debug");
             _logger.LogInformation("Log de Informação");
